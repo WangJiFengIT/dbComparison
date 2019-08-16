@@ -33,8 +33,6 @@ namespace dbComparison
             {
                 try
                 {
-                    SqlHelper_1.Open(txt_conn1.Text);
-                    SqlHelper_2.Open(txt_conn2.Text);
                     DataTable tables_1 = SqlHelper_1.GetTables();
                     DataTable tables_2 = SqlHelper_2.GetTables();
                     OrderedEnumerableRowCollection<DataRow> dataRows_1 = tables_1.AsEnumerable().OrderBy(a => a.Field<string>("name"));
@@ -134,6 +132,7 @@ namespace dbComparison
             {
                 try
                 {
+                    SqlHelper_1.Open(txt_conn1.Text);
                     MessageBox.Show("连接成功", "连接提示", MessageBoxButtons.OK, MessageBoxIcon.None);
                 }
                 catch (Exception es)
@@ -153,6 +152,7 @@ namespace dbComparison
             {
                 try
                 {
+                    SqlHelper_2.Open(txt_conn2.Text);
                     MessageBox.Show("连接成功", "连接提示", MessageBoxButtons.OK, MessageBoxIcon.None);
                 }
                 catch (Exception es)
