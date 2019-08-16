@@ -62,10 +62,20 @@ namespace dbComparison
         /// 打开数据库
         /// </summary>
         /// <param name="DataSource">数据库地址</param>
-        public static void Open(string DataSource)
+        public static string Open(string DataSource)
         {
-            sqlConnection = new SqlConnection(DataSource);
-            sqlConnection.Open();
+            string openInfo = string.Empty;
+            try
+            {
+                sqlConnection = new SqlConnection(DataSource);
+                sqlConnection.Open();
+                openInfo = "success";
+            }
+            catch (Exception ex)
+            {
+                openInfo = ex.Message;
+            }
+            return openInfo;
         }
         /// <summary>
         /// 异步打开数据库

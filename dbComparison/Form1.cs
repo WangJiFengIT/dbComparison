@@ -132,8 +132,8 @@ namespace dbComparison
             {
                 try
                 {
-                    SqlHelper_1.Open(txt_conn1.Text);
-                    MessageBox.Show("连接成功", "连接提示", MessageBoxButtons.OK, MessageBoxIcon.None);
+                    string openInfo = SqlHelper_1.Open(txt_conn1.Text);
+                    MessageBox.Show(openInfo == "success" ? "连接成功" : openInfo, "连接提示", MessageBoxButtons.OK, MessageBoxIcon.None);
                 }
                 catch (Exception es)
                 {
@@ -152,8 +152,8 @@ namespace dbComparison
             {
                 try
                 {
-                    SqlHelper_2.Open(txt_conn2.Text);
-                    MessageBox.Show("连接成功", "连接提示", MessageBoxButtons.OK, MessageBoxIcon.None);
+                    string openInfo = SqlHelper_2.Open(txt_conn2.Text);
+                    MessageBox.Show(openInfo == "success" ? "连接成功" : openInfo, "连接提示", MessageBoxButtons.OK, MessageBoxIcon.None);
                 }
                 catch (Exception es)
                 {
