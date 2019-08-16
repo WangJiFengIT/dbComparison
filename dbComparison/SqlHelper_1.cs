@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace dbComparison
 {
-    public class SqlHelper
+    public class SqlHelper_1
     {
         private static SqlConnection sqlConnection;
 
         #region SQL
-        private static readonly string connectionString = "Data Source={0};Initial Catalog={1};User ID={2};Password={3}";
         private static readonly string sqlGetDataBases = "select * from sys.databases";
         private static readonly string sqlGetObjects = "select * from {0}.sys.objects";
         private static readonly string sqlGetTables = sqlGetObjects + " where type='U'";
@@ -22,7 +21,6 @@ namespace dbComparison
         private static readonly string QUOTED_IDENTIFIER = "SET QUOTED_IDENTIFIER OFF";//让SQL启用双引号
         private static readonly string sqlGetTableInfo = QUOTED_IDENTIFIER + @"
                                                                                 SELECT 
-                                                                                CASE WHEN col.colorder = 1 THEN obj.name ELSE '' END AS 表名,
                                                                                 col.colorder AS 序号,
                                                                                 col.name AS 列名,
                                                                                 ISNULL(ep.[value], '') AS 列说明,
@@ -59,29 +57,23 @@ namespace dbComparison
         #endregion
 
         private static object obj = new object();
-        public SqlHelper() { }
+        public SqlHelper_1() { }
         /// <summary>
         /// 打开数据库
         /// </summary>
         /// <param name="DataSource">数据库地址</param>
-        /// <param name="UserId">用户名</param>
-        /// <param name="Paassword">密码</param>
-        /// <param name="DataBase">数据库名称【默认：master】</param>
-        public static void Open(string DataSource, string UserId, string Paassword, string DataBase = "master")
+        public static void Open(string DataSource)
         {
-            sqlConnection = new SqlConnection(string.Format(connectionString, DataSource, DataBase, UserId, Paassword));
+            sqlConnection = new SqlConnection(DataSource);
             sqlConnection.Open();
         }
         /// <summary>
         /// 异步打开数据库
         /// </summary>
         /// <param name="DataSource">数据库地址</param>
-        /// <param name="UserId">用户名</param>
-        /// <param name="Paassword">密码</param>
-        /// <param name="DataBase">数据库名称【默认：master】</param>
-        public static async void OpenAsync(string DataSource, string UserId, string Paassword, string DataBase = "master")
+        public static async void OpenAsync(string DataSource)
         {
-            sqlConnection = new SqlConnection(string.Format(connectionString, DataSource, DataBase, UserId, Paassword));
+            sqlConnection = new SqlConnection(DataSource);
             await sqlConnection.OpenAsync();
         }
         /// <summary>
@@ -95,26 +87,18 @@ namespace dbComparison
             }
         }
         /// <summary>
-        /// 获取所有数据库
-        /// </summary>
-        /// <returns></returns>
-        public static DataTable GetDataBase()
-        {
-            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlGetDataBases, sqlConnection);
-            DataTable dt = new DataTable();
-            sqlDataAdapter.Fill(dt);
-            return dt;
-        }
-        /// <summary>
         /// 获取数据库中所有表
         /// </summary>
-        /// <param name="DataBaseName">数据库名称</param>
         /// <returns></returns>
-        public static DataTable GetTables(string DataBaseName)
+        public static DataTable GetTables()
         {
-            sqlUseDataBase = $"USE {DataBaseName} ";
-            return GetDataTable(string.Format(sqlGetTables, DataBaseName));
+            return GetDataTable(" select * from sys.objects where type='U' ");
         }
+        /// <summary>
+        /// 获取某个表的数据结构
+        /// </summary>
+        /// <param name="TableName"></param>
+        /// <returns></returns>
         public static DataTable GetTableInfo(string TableName)
         {
             sqlUesTable = TableName;
